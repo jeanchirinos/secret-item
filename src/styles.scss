@@ -1,0 +1,83 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  background-color: #1e394d;
+  font-family: 'Baloo 2';
+  color: white;
+  font-size: 18px;
+}
+
+.game-info {
+  text-align: center;
+  padding-block: 2rem;
+}
+
+main {
+  height: calc(100vh - 92px);
+  display: flex;
+  justify-content: center;
+
+  & > * {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+form {
+  left: 50%;
+  transition: left 0.3s;
+}
+
+input.currentNumber {
+  width: 80px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  text-align: center;
+  border-color: transparent;
+
+  &::-webkit-inner-spin-button {
+    display: none;
+  }
+
+  &:focus {
+    outline-color: skyblue;
+  }
+
+  @media (min-width: 768px) {
+    width: 100px;
+  }
+}
+
+.lower {
+  left: 25%;
+}
+
+.higher {
+  left: 75%;
+}
+
+label {
+  color: gray;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: top 0.3s;
+  pointer-events: none;
+
+  &.selected {
+    top: -50%;
+    color: inherit;
+  }
+}
+
+.maxNumber {
+  all: unset;
+  color: white;
+  text-align: left;
+  width: 4rem;
+}
