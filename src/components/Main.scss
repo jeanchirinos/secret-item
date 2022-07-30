@@ -1,0 +1,56 @@
+.main-wrapper {
+  height: calc(100vh - 71px);
+  display: flex;
+  justify-content: center;
+
+  & > * {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  input {
+    width: 100px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    text-align: center;
+    border-color: transparent;
+
+    &.winner {
+      background-color: #e9fd90;
+    }
+
+    &::-webkit-inner-spin-button {
+      display: none;
+    }
+
+    &:focus {
+      outline-width: 0.5rem;
+      outline-color: rgb(180, 0, 0);
+    }
+
+    @media (min-width: 768px) {
+      width: 120px;
+    }
+  }
+}
+
+form {
+  left: 50%;
+  transition: left 0.3s;
+}
+
+label {
+  color: gray;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: top 0.3s;
+  pointer-events: none;
+
+  &.selected {
+    top: -50%;
+    color: inherit;
+  }
+}

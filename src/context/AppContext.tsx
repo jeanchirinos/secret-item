@@ -1,61 +1,41 @@
-import { IContextComponent } from '../interfaces'
 import { createContext, useRef, useState } from 'react'
+import { CtxProps, IContextComponent } from 'interfaces'
 
-interface CtxProps {
-  maxNumber: number
-  secretNumber: number
-  attemps: number
-  lowerNumber: number
-  higherNumber: number
-  currentNumber: number
-  showModal: boolean
-  changeMaxNumber(e: React.ChangeEvent<HTMLInputElement>): void
-  handleSubmit(e: React.FormEvent<HTMLFormElement>): void
-  moveLabel(): void
-  inputRef: React.RefObject<HTMLInputElement> | null
-  handleInputChange(e: React.ChangeEvent<HTMLInputElement>): void
-  resetApp(): void
-}
-
-const initialState = {
-  maxNumber: 500,
-  attemps: 0,
-  secretNumber: Math.floor(Math.random() * 500 + 1),
-  lowerNumber: 0,
-  higherNumber: 500,
-  currentNumber: 0,
-  showModal: false,
-  changeMaxNumber: () => {},
-  handleSubmit: () => {},
-  moveLabel: () => {},
-  inputRef: null,
-  handleInputChange: () => {},
-  resetApp: () => {}
-}
-
-export const CtxApp = createContext<CtxProps>(initialState)
-// export const CtxApp = createContext(null)
+export const CtxApp = createContext({} as CtxProps)
 
 export default function AppContext({ children }: IContextComponent) {
   const [maxNumber, setMaxNumber] = useState(500)
 
   const initialState = {
-    secretNumber: Math.floor(Math.random() * maxNumber + 1),
-    number: 0,
-    modal: false
+    secretNumber: Math.floor(Math.random() * maxNumber) + 1,
+    higherNumber: maxNumber + 1
   }
 
+  const [attemps, setAttemps] = useState(0)
   const [secretNumber, setSecretNumber] = useState(initialState.secretNumber)
-
-  const [attemps, setAttemps] = useState(initialState.number)
-
-  const [lowerNumber, setLowerNumber] = useState(initialState.number)
-  const [higherNumber, setHigherNumber] = useState(500)
-  const [currentNumber, setCurrentNumber] = useState(initialState.number)
-
-  const [showModal, setShowModal] = useState(initialState.modal)
+  const [lowerNumber, setLowerNumber] = useState(0)
+  const [higherNumber, setHigherNumber] = useState(initialState.higherNumber)
+  const [currentNumber, setCurrentNumber] = useState(0)
 
   const inputRef = useRef<HTMLInputElement>(null)
+
+  function resetStates() {
+    setAttemps(0)
+    setLowerNumber(0)
+    setCurrentNumber(0)
+  }
+
+  function changeMaxNumber(e: React.ChangeEvent<HTMLInputElement>) {
+    const number = Number(e.target.value) || 2
+
+    setMaxNumber(number)
+    setHigherNumber(number + 1)
+    setSecretNumber(Math.floor(Math.random() * number) + 1)
+
+    document.querySelector('form')?.classList.remove('higher', 'lower')
+
+    resetStates()
+  }
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -85,52 +65,11 @@ export default function AppContext({ children }: IContextComponent) {
       setTimeout(() => setHigherNumber(number), 300)
     } else {
       input.blur()
-      input.style.backgroundColor = '#eb8c17'
+      input.classList.add('winner')
 
-      setTimeout(() => setShowModal(true), 500)
+      const dialog = document.querySelector('dialog')
+      setTimeout(() => dialog?.showModal(), 500)
     }
-  }
-
-  function moveLabel() {
-    const input = inputRef.current
-    const label = document.querySelector('label')
-
-    if (input?.value) return
-    label?.classList.toggle('selected')
-  }
-
-  function resetStates() {
-    const { number } = initialState
-
-    setAttemps(number)
-    setLowerNumber(number)
-    setCurrentNumber(number)
-  }
-
-  function resetApp() {
-    resetStates()
-    setHigherNumber(maxNumber)
-    setSecretNumber(initialState.secretNumber)
-    setShowModal(initialState.modal)
-
-    const input = inputRef.current
-    if (!input) return
-    input.focus()
-    input.style.backgroundColor = 'white'
-  }
-
-  function changeMaxNumber(e: React.ChangeEvent<HTMLInputElement>) {
-    let value = Number(e.target.value)
-
-    if (!e.target.value) value = 1
-
-    setMaxNumber(value)
-    setHigherNumber(value)
-    setSecretNumber(Math.floor(Math.random() * value + 1))
-
-    document.querySelector('#form-currentNumber')?.classList.remove('higher', 'lower')
-
-    resetStates()
   }
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -142,20 +81,32 @@ export default function AppContext({ children }: IContextComponent) {
     if (number.length > digitsHigher) e.target.value = auxNumber
   }
 
+  function resetApp() {
+    resetStates()
+    setSecretNumber(initialState.secretNumber)
+    setHigherNumber(initialState.higherNumber)
+
+    const dialog = document.querySelector('dialog')
+    dialog?.close()
+
+    const input = inputRef.current
+    if (!input) return
+    input.focus()
+    input.classList.remove('winner')
+  }
+
   const value = {
     attemps,
     maxNumber,
-    changeMaxNumber,
     secretNumber,
     lowerNumber,
     higherNumber,
     currentNumber,
-    showModal,
-    handleSubmit,
-    moveLabel,
-    resetApp,
     inputRef,
-    handleInputChange
+    changeMaxNumber,
+    handleSubmit,
+    handleInputChange,
+    resetApp
   }
 
   return <CtxApp.Provider value={value}>{children}</CtxApp.Provider>

@@ -1,0 +1,35 @@
+dialog {
+  width: 300px;
+  max-width: 90%;
+  aspect-ratio: 4/3;
+  border: none;
+  border-radius: 0.5rem;
+  text-align: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.2rem;
+
+  &::backdrop {
+    background-color: black;
+    opacity: 0.3;
+  }
+
+  button {
+    background-color: #c24949;
+    color: white;
+    padding: 0.5rem 2rem;
+    border-color: #c24949;
+    border-radius: 8px;
+    margin-top: 2.5rem;
+    cursor: pointer;
+    font: inherit;
+    outline: none;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: transparent;
+      color: #c24949;
+    }
+  }
+}
