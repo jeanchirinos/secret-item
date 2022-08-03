@@ -25,8 +25,14 @@ export default function AppContext({ children }: IContextComponent) {
     setCurrentNumber(0)
   }
 
-  function changeMaxNumber(e: React.ChangeEvent<HTMLInputElement>) {
-    const number = Number(e.target.value) || 2
+  function changeMaxNumber(e?: React.ChangeEvent<HTMLInputElement>) {
+    let number
+
+    if (e) {
+      number = Number(e.target.value)
+    } else {
+      number = 2
+    }
 
     setMaxNumber(number)
     setHigherNumber(number + 1)

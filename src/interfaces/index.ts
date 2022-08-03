@@ -10,7 +10,7 @@ export interface CtxProps {
   higherNumber: number
   currentNumber: number
   inputRef: React.RefObject<HTMLInputElement>
-  changeMaxNumber(e: React.ChangeEvent<HTMLInputElement>): void
+  changeMaxNumber(e?: React.ChangeEvent<HTMLInputElement>): void
   handleSubmit(e: React.FormEvent<HTMLFormElement>): void
   handleInputChange(e: React.ChangeEvent<HTMLInputElement>): void
   resetApp(): void
